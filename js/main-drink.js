@@ -100,9 +100,10 @@ function render(main, drink, rankings) {
     scoreCard(drink, score, rankings.weights ?? {}),
     el('section', { class: 'card' },
       el('h2', { text: '술 정보' }),
-      safeUrl(drink.image_url)
-        ? el('figure', { class: 'photo' }, drinkPhoto(drink, 'photo-frame'), el('figcaption', { class: 'muted small', text: `사진: ${drink.image_credit ?? '더술닷컴'}` }))
-        : null,
+      el('figure', { class: 'photo' }, drinkPhoto(drink, 'photo-frame'),
+        el('figcaption', { class: 'muted small', text: safeUrl(drink.image_url)
+          ? `사진: ${drink.image_credit ?? '더술닷컴'}`
+          : '사진이 없어 병 그림으로 대신했습니다.' })),
       facts,
       drink.abv === null && !drink.image_url
         ? el('p', { class: 'muted small', text: '품평회 수상작 명단에서 옮긴 술이라 도수·용량·원재료·사진 정보가 아직 없습니다. 자세한 정보는 양조장에 확인해 주세요.' })

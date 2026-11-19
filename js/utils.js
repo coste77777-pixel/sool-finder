@@ -101,17 +101,44 @@ export function showMessage(main, message, withHomeLink = false) {
         withHomeLink ? el('p', {}, el('a', { class: 'back', href: 'index.html', text: '← 첫 화면으로' })) : null)));
 }
 
-/** 술 사진 요소. 주소가 없거나 불러오지 못하면 자리를 비워 둔다. */
+// 사진이 없는 술 자리에 넣는 병 그림. 분야마다 병 모양이 다르다. 직접 그린 선화라 출처 표기가 필요 없다.
+const BOTTLE_PATHS = {
+  takju: ['M19 6h10v5H19z', 'M20 11v5c0 4-8 5-8 12v26a3 3 0 0 0 3 3h18a3 3 0 0 0 3-3V28c0-7-8-8-8-12v-5', 'M12 34h24M12 46h24'],
+  yakju: ['M21 5h6v4h-6z', 'M21 9v12c0 5-7 6-7 13v20a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V34c0-7-7-8-7-13V9', 'M18 38h12v10H18z'],
+  spirits: ['M20 4h8v5h-8z', 'M21 9v7h-6a2 2 0 0 0-2 2v37a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V18a2 2 0 0 0-2-2h-6V9', 'M17 28h14v16H17z'],
+  fruit: ['M21 4h6v6h-6z', 'M21 10v15c0 3-6 4-6 9v21a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V34c0-5-6-6-6-9V10', 'M15 39h18M15 50h18'],
+  etc: ['M17 11h14v5H17z', 'M19 16c-6 4-10 10-10 20 0 12 5 21 15 21s15-9 15-21c0-10-4-16-10-20', 'M18 34h12M20 39h8'],
+};
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+function bottleDrawing(category) {
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 48 64');
+  svg.setAttribute('aria-hidden', 'true');
+  (BOTTLE_PATHS[category] ?? BOTTLE_PATHS.etc).forEach((d) => {
+    const path = document.createElementNS(SVG_NS, 'path');
+    path.setAttribute('d', d);
+    svg.append(path);
+  });
+  return svg;
+}
+
+/** 술 사진 요소. 주소가 없거나 불러오지 못하면 분야에 맞는 병 그림을 넣는다. */
 export function drinkPhoto(drink, className) {
   const url = safeUrl(drink?.image_url);
   const box = el('span', { class: className });
+  const draw = () => {
+    box.classList.add('drawn');
+    box.replaceChildren(bottleDrawing(drink?.category));
+  };
   if (!url) {
+    draw();
     return box;
   }
   const img = el('img', {
     src: url, alt: `${drink.name} 사진`, loading: 'lazy', decoding: 'async', referrerpolicy: 'no-referrer',
   });
-  img.addEventListener('error', () => img.remove());
+  img.addEventListener('error', draw);
   box.append(img);
   return box;
 }

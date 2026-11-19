@@ -433,12 +433,28 @@ h3 {
   overflow: hidden;
 }
 
-/* 사진이 없는 술: 빈 상자 대신 가는 사선 하나 */
-.thumb:empty,
-.photo-frame:empty {
-  background:
-    linear-gradient(to top right, transparent calc(50% - 0.5px), var(--line) 50%, transparent calc(50% + 0.5px)),
-    var(--surface);
+/* 사진이 없는 술: 분야에 맞는 병 그림(선화) */
+.thumb.drawn,
+.photo-frame.drawn {
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  color: var(--muted);
+}
+
+.drawn svg {
+  width: 62%;
+  height: 78%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.drawn svg path {
+  vector-effect: non-scaling-stroke;
 }
 
 .thumb img,
@@ -536,21 +552,6 @@ h3 {
   margin-top: 10px;
   text-align: left;
   font-size: 1.25rem;
-}
-
-/* 1위 술에 사진이 없으면 큰 빈 액자 대신 글자만 크게 둔다. */
-.rank-list.featured .rank-row:first-child:has(.thumb:empty) {
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.rank-list.featured .rank-row:first-child .thumb:empty {
-  display: none;
-}
-
-.rank-list.featured .rank-row:first-child:has(.thumb:empty) .rank-no,
-.rank-list.featured .rank-row:first-child:has(.thumb:empty) .rank-main,
-.rank-list.featured .rank-row:first-child:has(.thumb:empty) .score {
-  grid-column: 1;
 }
 
 .rank-row:nth-child(-n + 3) .rank-no {
