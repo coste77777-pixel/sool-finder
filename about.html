@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>순위 기준과 자료 출처 — 전통주 발견</title>
+  <script>
+    (function () {
+      var theme = null;
+      try { theme = localStorage.getItem('sool-theme'); } catch (e) { theme = null; }
+      if (theme !== 'dark' && theme !== 'light') {
+        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="site-name" href="index.html">전통주 <span>발견</span></a>
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="어두운 화면으로 바꾸기">어둡게</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap"><p class="muted">자료를 불러오는 중입니다…</p></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>19세 미만은 주류를 구매할 수 없습니다.</p>
+      <p>구매처 링크는 다른 사이트로 이동하며, 가격과 판매 여부는 그곳에서 확인해 주세요.</p>
+      <a href="about.html">순위 기준과 자료 출처</a>
+    </div>
+  </footer>
+
+  <script type="module" src="js/main-about.js"></script>
+</body>
+</html>

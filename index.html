@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>전통주 발견 — 몰랐던 양조장과 우리술 찾기</title>
+  <meta name="description" content="전국 양조장과 우리술을 분야별·지역별로 찾아보는 대시보드">
+  <script>
+    (function () {
+      var theme = null;
+      try { theme = localStorage.getItem('sool-theme'); } catch (e) { theme = null; }
+      if (theme !== 'dark' && theme !== 'light') {
+        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="site-name" href="index.html">전통주 <span>발견</span></a>
+      <div class="search-box">
+        <label>
+          <span class="muted small" hidden>검색</span>
+          <input id="search" type="search" placeholder="양조장·술 이름 검색" aria-label="양조장 또는 술 이름 검색" autocomplete="off">
+        </label>
+      </div>
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="어두운 화면으로 바꾸기">어둡게</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap">
+      <h1>몰랐던 양조장, 새로운 우리술</h1>
+      <p class="muted" id="lead">자료를 불러오는 중입니다…</p>
+
+      <section id="search-results" class="card" hidden aria-live="polite"></section>
+
+      <section class="summary" id="summary" aria-label="요약"></section>
+
+      <div class="grid-2">
+        <section class="card" aria-labelledby="h-new">
+          <h2 id="h-new">이번 갱신에서 새로 발견</h2>
+          <div id="new-found"></div>
+        </section>
+        <section class="card" aria-labelledby="h-hidden">
+          <h2 id="h-hidden">숨은 양조장 TOP 10</h2>
+          <div id="hidden-breweries"></div>
+        </section>
+      </div>
+
+      <section class="card" aria-labelledby="h-news">
+        <h2 id="h-news">새 소식</h2>
+        <div id="news"></div>
+      </section>
+
+      <section class="card" aria-labelledby="h-rank">
+        <h2 id="h-rank">분야별 순위</h2>
+        <div class="tabs" id="cat-tabs" role="tablist" aria-label="분야"></div>
+        <div class="tabs sub" id="mode-tabs" role="tablist" aria-label="순위 종류"></div>
+        <div id="rank-panel" role="tabpanel" tabindex="0"></div>
+      </section>
+
+      <section class="card" aria-labelledby="h-region">
+        <h2 id="h-region">지역으로 찾기</h2>
+        <div class="region-grid" id="region-grid"></div>
+        <div id="region-result" aria-live="polite"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>19세 미만은 주류를 구매할 수 없습니다.</p>
+      <p>구매처 링크는 다른 사이트로 이동하며, 가격과 판매 여부는 그곳에서 확인해 주세요.</p>
+      <a href="about.html">순위 기준과 자료 출처</a>
+    </div>
+  </footer>
+
+  <script type="module" src="js/main-index.js"></script>
+</body>
+</html>
