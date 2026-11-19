@@ -8,6 +8,10 @@ const PAGE_SIZE = 20;
 const NO_REGION = '지역 미상';
 
 const state = { category: 'takju', mode: 'overall', shown: PAGE_SIZE, region: null };
+
+function pad(n) {
+  return n === null || n === undefined ? '' : String(n).padStart(2, '0');
+}
 let data = null;
 
 function drinkRow(row, rankNo) {
@@ -26,11 +30,11 @@ function drinkRow(row, rankNo) {
       : '양조장 정보 없음',
     ` · ${brewery?.region ?? NO_REGION} · ${formatAbv(drink.abv)}`);
   return el('li', { class: 'rank-row with-thumb' },
-    el('span', { class: 'rank-no', text: rankNo === null ? '' : String(rankNo) }),
+    el('span', { class: 'rank-no', text: pad(rankNo) }),
     drinkPhoto(drink, 'thumb'),
     el('div', { class: 'rank-main' }, nameLine, meta),
     row.discovery === undefined
-      ? el('div', { class: 'score' }, row.score === undefined ? '' : `${row.score}점`)
+      ? el('div', { class: 'score' }, row.score === undefined ? '' : `${row.score}`)
       : el('div', { class: 'score' }, `발견 ${row.discovery}점`, el('small', { text: `품질 ${row.score} · 알려진 정도 ${row.awareness}` })));
 }
 
@@ -38,17 +42,18 @@ function renderSummary() {
   const { meta } = data;
   const stats = [
     [meta.brewery_count.toLocaleString('ko-KR'), '양조장'],
-    [meta.drink_count.toLocaleString('ko-KR'), '술'],
+    [meta.drink_count.toLocaleString('ko-KR'), '우리술'],
     [(meta.ranked_count ?? 0).toLocaleString('ko-KR'), '순위에 오른 술'],
-    [formatDate(meta.updated).replace(/\. /g, '.').replace(/\.$/, ''), '최근 갱신'],
+    [(data.rankings.hidden_breweries?.length ?? 0).toLocaleString('ko-KR'), '숨은 양조장'],
   ];
   if (meta.coverage_pct !== null && meta.coverage_pct !== undefined) {
     stats.push([`${meta.coverage_pct}%`, '면허 대비 수집률']);
   }
   document.getElementById('summary').replaceChildren(
     ...stats.map(([value, label]) => el('div', { class: 'stat' }, el('b', { text: value }), el('span', { text: label }))));
+  document.getElementById('kicker').textContent = `${formatDate(meta.updated)} 갱신 · 매주 월요일`;
   document.getElementById('lead').textContent =
-    '전국 양조장과 우리술을 분야별·지역별로 찾아보세요. 이름을 누르면 자세한 정보가 나옵니다.';
+    `전국 양조장 ${meta.brewery_count.toLocaleString('ko-KR')}곳의 술을 품평회 수상 기록으로 줄 세우고, 실력에 비해 덜 알려진 곳을 따로 골랐습니다.`;
 }
 
 function renderNewFound() {
@@ -116,25 +121,28 @@ function renderHiddenBreweries() {
     if (!b) {
       return;
     }
+    const awareness = Math.max(0, Math.min(100, Number(row.awareness) || 0));
     list.append(el('li', { class: 'rank-row' },
-      el('span', { class: 'rank-no', text: String(i + 1) }),
+      el('span', { class: 'rank-no', text: pad(i + 1) }),
       el('div', { class: 'rank-main' },
         el('a', { class: 'name', href: `brewery.html?id=${encodeURIComponent(b.id)}`, text: b.name }),
-        el('div', { class: 'rank-meta', text: `${b.region ?? NO_REGION} · 순위에 든 술 ${row.drink_count ?? 0}종` })),
-      row.discovery === undefined
-        ? el('div', { class: 'score' }, `${row.score}점`)
-        : el('div', { class: 'score' }, `발견 ${row.discovery}점`,
-          el('small', { text: `품질 ${row.score} · 알려진 정도 ${row.awareness}` }))));
+        el('div', { class: 'rank-meta', text: `${b.region ?? NO_REGION} · 순위에 든 술 ${row.drink_count ?? 0}종 · 품질 ${row.score}` }),
+        row.awareness === undefined ? null
+          : el('span', { class: 'aware', title: `알려진 정도 ${row.awareness}`, 'aria-label': `알려진 정도 ${row.awareness}` },
+            el('i', { style: `width:${awareness}%` }))),
+      el('div', { class: 'score', text: String(row.discovery ?? row.score) })));
   });
-  box.replaceChildren(list);
+  box.replaceChildren(list,
+    el('p', { class: 'muted small credit', text: '숫자는 발견 점수(품질과 덜 알려진 정도의 평균), 막대는 알려진 정도입니다. 막대가 짧을수록 덜 알려진 곳입니다.' }));
 }
 
 function makeTabs(container, entries, selected, onSelect) {
   container.replaceChildren(...entries.map(([key, label]) => {
+    const [text, count] = Array.isArray(label) ? label : [label, null];
     const button = el('button', {
       class: 'tab', type: 'button', role: 'tab', 'aria-selected': key === selected ? 'true' : 'false',
-      tabindex: key === selected ? '0' : '-1', 'data-key': key, text: label,
-    });
+      tabindex: key === selected ? '0' : '-1', 'data-key': key,
+    }, text, count === null ? null : el('span', { class: 'count', text: String(count) }));
     button.addEventListener('click', () => onSelect(key));
     return button;
   }));
@@ -155,7 +163,7 @@ function renderRanking() {
   const { rankings } = data;
   const cat = rankings.by_category?.[state.category] ?? { overall: [], hidden: [] };
   makeTabs(document.getElementById('cat-tabs'),
-    CATEGORY_ORDER.map((key) => [key, `${CATEGORY_LABELS[key]} ${rankings.by_category?.[key]?.overall?.length ?? 0}`]),
+    CATEGORY_ORDER.map((key) => [key, [CATEGORY_LABELS[key], rankings.by_category?.[key]?.overall?.length ?? 0]]),
     state.category,
     (key) => { state.category = key; state.shown = PAGE_SIZE; renderRanking(); });
   makeTabs(document.getElementById('mode-tabs'),
@@ -174,7 +182,7 @@ function renderRanking() {
     panel.replaceChildren(el('p', { class: 'muted', text: '이 분야에는 아직 순위에 오른 술이 없습니다.' }));
     return;
   }
-  const list = el('ol', { class: 'rank-list' });
+  const list = el('ol', { class: 'rank-list featured' });
   rows.slice(0, state.shown).forEach((row, i) => {
     const item = drinkRow(row, row.rank ?? i + 1);
     if (item) {
@@ -183,7 +191,7 @@ function renderRanking() {
   });
   const children = [list];
   const photoCredit = data.drinks.some((d) => d.image_url) ? '사진: 더술닷컴 · ' : '';
-  const credit = el('p', { class: 'muted small', text: state.mode === 'hidden'
+  const credit = el('p', { class: 'muted small credit', text: state.mode === 'hidden'
     ? photoCredit + '발견 점수는 품질 점수와 "덜 알려진 정도"의 평균입니다. 품질 40점 이상이면서 분야 중간 이상이고, 알려진 정도가 50 이하인 술만 넣었습니다. 대형 업체는 뺐습니다.'
     : photoCredit + '점수가 같으면 같은 순위로 표시합니다.' });
   if (rows.length > state.shown) {

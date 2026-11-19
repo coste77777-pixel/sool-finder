@@ -16,53 +16,72 @@
     })();
   </script>
   <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header class="site-header">
     <div class="wrap">
       <a class="site-name" href="index.html">전통주 <span>발견</span></a>
-      <div class="search-box">
-        <label>
-          <span class="muted small" hidden>검색</span>
-          <input id="search" type="search" placeholder="양조장·술 이름 검색" aria-label="양조장 또는 술 이름 검색" autocomplete="off">
-        </label>
-      </div>
+      <nav class="site-nav" aria-label="바로가기">
+        <a href="#h-rank">분야별 순위</a>
+        <a href="#h-hidden">숨은 양조장</a>
+        <a href="#h-news">소식</a>
+        <a href="#h-region">지역</a>
+        <a href="about.html">순위 기준</a>
+      </nav>
       <button id="theme-toggle" class="icon-btn" type="button" aria-label="어두운 화면으로 바꾸기">어둡게</button>
     </div>
   </header>
 
   <main id="main">
     <div class="wrap">
-      <h1>몰랐던 양조장, 새로운 우리술</h1>
-      <p class="muted" id="lead">자료를 불러오는 중입니다…</p>
+      <div class="hero">
+        <div>
+          <p class="kicker" id="kicker">&nbsp;</p>
+          <h1>아직 이름을 모르는<br>양조장의 좋은 술.</h1>
+        </div>
+        <div>
+          <p class="lead" id="lead">자료를 불러오는 중입니다…</p>
+          <label class="search-box">
+            <input id="search" type="search" placeholder="양조장이나 술 이름으로 찾기" aria-label="양조장 또는 술 이름 검색" autocomplete="off">
+          </label>
+        </div>
+        <section class="summary" id="summary" aria-label="요약"></section>
+      </div>
 
       <section id="search-results" class="card" hidden aria-live="polite"></section>
 
-      <section class="summary" id="summary" aria-label="요약"></section>
-
-      <div class="grid-2">
-        <section class="card" aria-labelledby="h-new">
-          <h2 id="h-new">이번 갱신에서 새로 발견</h2>
-          <div id="new-found"></div>
+      <div class="cols cols-wrap">
+        <section class="card" aria-labelledby="h-rank">
+          <div class="section-head">
+            <h2 id="h-rank">분야별 순위</h2>
+          </div>
+          <div class="tabs" id="cat-tabs" role="tablist" aria-label="분야"></div>
+          <div class="tabs sub" id="mode-tabs" role="tablist" aria-label="순위 종류"></div>
+          <div id="rank-panel" role="tabpanel" tabindex="0"></div>
         </section>
         <section class="card" aria-labelledby="h-hidden">
-          <h2 id="h-hidden">숨은 양조장 TOP 10</h2>
+          <div class="section-head">
+            <h2 id="h-hidden">숨은 양조장</h2>
+          </div>
+          <p class="section-note">수상 실력에 비해 검색에 잘 나오지 않는 곳입니다.</p>
           <div id="hidden-breweries"></div>
         </section>
       </div>
 
-      <section class="card" aria-labelledby="h-news">
-        <h2 id="h-news">새 소식</h2>
-        <div id="news"></div>
-      </section>
-
-      <section class="card" aria-labelledby="h-rank">
-        <h2 id="h-rank">분야별 순위</h2>
-        <div class="tabs" id="cat-tabs" role="tablist" aria-label="분야"></div>
-        <div class="tabs sub" id="mode-tabs" role="tablist" aria-label="순위 종류"></div>
-        <div id="rank-panel" role="tabpanel" tabindex="0"></div>
-      </section>
+      <div class="grid-2 grid-wrap">
+        <section class="card" aria-labelledby="h-news">
+          <h2 id="h-news">소식</h2>
+          <div id="news"></div>
+        </section>
+        <section class="card" aria-labelledby="h-new">
+          <h2 id="h-new">이번 주 새로 발견</h2>
+          <div id="new-found"></div>
+        </section>
+      </div>
 
       <section class="card" aria-labelledby="h-region">
         <h2 id="h-region">지역으로 찾기</h2>
