@@ -190,7 +190,9 @@ function renderRanking() {
     }
   });
   const children = [list];
-  const photoCredit = data.drinks.some((d) => d.image_url) ? '사진: 더술닷컴 · ' : '';
+  const photoCredit = data.drinks.some((d) => d.image_url)
+    ? (data.drinks.some((d) => d.image_credit) ? '사진: 더술닷컴, 일부는 각 양조장 홈페이지 · ' : '사진: 더술닷컴 · ')
+    : '';
   const credit = el('p', { class: 'muted small credit', text: state.mode === 'hidden'
     ? photoCredit + '발견 점수는 품질 점수와 "덜 알려진 정도"의 평균입니다. 품질 40점 이상이면서 분야 중간 이상이고, 알려진 정도가 50 이하인 술만 넣었습니다. 대형 업체는 뺐습니다.'
     : photoCredit + '점수가 같으면 같은 순위로 표시합니다.' });

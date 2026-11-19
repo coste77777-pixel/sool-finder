@@ -101,7 +101,7 @@ function render(main, drink, rankings) {
     el('section', { class: 'card' },
       el('h2', { text: '술 정보' }),
       safeUrl(drink.image_url)
-        ? el('figure', { class: 'photo' }, drinkPhoto(drink, 'photo-frame'), el('figcaption', { class: 'muted small', text: '사진: 더술닷컴' }))
+        ? el('figure', { class: 'photo' }, drinkPhoto(drink, 'photo-frame'), el('figcaption', { class: 'muted small', text: `사진: ${drink.image_credit ?? '더술닷컴'}` }))
         : null,
       facts,
       drink.abv === null && !drink.image_url
