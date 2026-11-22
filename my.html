@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>내 술장 — 전통주 발견</title>
+  <script>
+    (function () {
+      var theme = null;
+      try { theme = localStorage.getItem('sool-theme'); } catch (e) { theme = null; }
+      if (theme !== 'dark' && theme !== 'light') {
+        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+  <meta name="theme-color" content="#f6f4ef">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="site-name" href="index.html">전통주 <span>발견</span></a>
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="어두운 화면으로 바꾸기">어둡게</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap"><p class="muted">자료를 불러오는 중입니다…</p></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>19세 미만은 주류를 구매할 수 없습니다.</p>
+      <p>구매처 링크는 다른 사이트로 이동하며, 가격과 판매 여부는 그곳에서 확인해 주세요.</p>
+      <a href="about.html">순위 기준과 자료 출처</a> · <a href="my.html">내 술장</a> · <a href="privacy.html">개인정보처리방침</a>
+    </div>
+  </footer>
+
+  <script type="module" src="js/main-my.js"></script>
+</body>
+</html>

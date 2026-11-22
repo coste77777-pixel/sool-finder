@@ -1,4 +1,5 @@
-import { initTheme } from './theme.js';
+import { initApp } from './app.js';
+import { myStore } from './store.js';
 import { allNews, breweryById, drinkById, drinksOfBrewery, loadAll } from './data.js';
 import {
   CATEGORY_LABELS, CATEGORY_ORDER, REGION_ORDER, drinkPhoto, el, formatAbv, formatDate, getParam, newsItem, showMessage,
@@ -54,6 +55,30 @@ function renderSummary() {
   document.getElementById('kicker').textContent = `${formatDate(meta.updated)} 갱신 · 매주 월요일`;
   document.getElementById('lead').textContent =
     `전국 양조장 ${meta.brewery_count.toLocaleString('ko-KR')}곳의 술을 품평회 수상 기록으로 줄 세우고, 실력에 비해 덜 알려진 곳을 따로 골랐습니다.`;
+}
+
+/** 지난번에 연 뒤로 새로 들어온 것을 알려 주고, 이번 갱신까지 봤다고 적어 둔다. */
+function renderSince() {
+  const store = myStore();
+  const last = store.lastSeen();
+  const { breweries, drinks, meta } = data;
+  const box = document.getElementById('since');
+  if (last && last < meta.updated) {
+    const counts = [
+      [breweries.filter((b) => (b.first_seen ?? '') > last).length, '새 양조장', '곳'],
+      [drinks.filter((d) => (d.first_seen ?? '') > last).length, '새 술', '종'],
+      [allNews().filter((n) => (n.collected ?? n.date ?? '') > last).length, '새 소식', '건'],
+    ].filter(([n]) => n > 0);
+    if (counts.length) {
+      box.hidden = false;
+      box.replaceChildren(el('p', { class: 'notice' },
+        `지난번(${formatDate(last)})에 본 뒤로 `,
+        el('strong', { text: counts.map(([n, label, unit]) => `${label} ${n}${unit}`).join(' · ') }),
+        '이 들어왔습니다. ',
+        el('a', { href: '#h-news', text: '소식 보기' })));
+    }
+  }
+  store.markSeen(meta.updated);
 }
 
 function renderNewFound() {
@@ -292,7 +317,7 @@ function renderSearch(query) {
 }
 
 async function start() {
-  initTheme();
+  initApp('home');
   const main = document.getElementById('main');
   try {
     data = await loadAll();
@@ -306,6 +331,7 @@ async function start() {
   }
   try {
     renderSummary();
+    renderSince();
     renderNewFound();
     renderNews();
     renderHiddenBreweries();

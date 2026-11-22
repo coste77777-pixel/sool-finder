@@ -1,0 +1,22 @@
+{
+  "name": "전통주 발견",
+  "short_name": "전통주 발견",
+  "description": "몰랐던 양조장과 좋은 우리술을 찾아보는 곳",
+  "lang": "ko",
+  "id": "./index.html",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f4ef",
+  "theme_color": "#f6f4ef",
+  "categories": ["food", "lifestyle"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "내 술장", "url": "./my.html", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "분야별 순위", "url": "./index.html#h-rank", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

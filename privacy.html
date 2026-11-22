@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>개인정보처리방침 — 전통주 발견</title>
+  <script>
+    (function () {
+      var theme = null;
+      try { theme = localStorage.getItem('sool-theme'); } catch (e) { theme = null; }
+      if (theme !== 'dark' && theme !== 'light') {
+        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+  <meta name="theme-color" content="#f6f4ef">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="site-name" href="index.html">전통주 <span>발견</span></a>
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="어두운 화면으로 바꾸기">어둡게</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap">
+      <a class="back" href="index.html">← 첫 화면</a>
+      <h1>개인정보처리방침</h1>
+      <p class="muted">시행일 <time datetime="2026-11-23">2026년 11월 23일</time> · 「전통주 발견」 웹사이트와 안드로이드 앱에 똑같이 적용됩니다.</p>
+
+      <section class="card">
+        <h2>한눈에 보기</h2>
+        <ul>
+          <li>회원 가입과 로그인이 없습니다. 이름·전화번호·이메일·위치 같은 개인정보를 받지 않습니다.</li>
+          <li>운영자가 관리하는 서버가 없습니다. 이용 기록을 모으는 분석 도구와 광고도 넣지 않았습니다.</li>
+          <li>찜한 술과 마셔 본 기록은 쓰시는 기기 안에만 저장되고, 운영자를 포함해 누구에게도 보내지 않습니다.</li>
+          <li>앱 안에서 술을 팔거나 결제를 받지 않습니다.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>운영자가 모으는 정보</h2>
+        <p>없습니다. 「전통주 발견」은 미리 만들어 둔 화면과 자료 파일을 그대로 보여 주는 사이트이고, 앱은 이 사이트를 전체 화면으로 여는 방식입니다. 이용자가 입력한 내용을 받아 두는 곳이 없습니다.</p>
+      </section>
+
+      <section class="card">
+        <h2>기기 안에만 저장되는 것</h2>
+        <p>아래 내용은 쓰시는 폰이나 컴퓨터의 브라우저 저장 공간에만 남습니다. 밖으로 보내지 않으므로 운영자도 볼 수 없습니다.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>저장되는 것</th><th>쓰는 곳</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>찜한 술·양조장</td><td>「내 술장」에 모아 보여 주기</td></tr>
+              <tr><td>마셔 본 술 표시, 내 별점, 한 줄 메모</td><td>「내 술장」에 내 기록으로 보여 주기</td></tr>
+              <tr><td>만 19세 이상 확인 여부</td><td>확인 화면을 다시 묻지 않기</td></tr>
+              <tr><td>화면 밝기 선택(밝게·어둡게)</td><td>다음에 열 때 같은 화면으로 보여 주기</td></tr>
+              <tr><td>마지막으로 연 때</td><td>그 뒤에 새로 나온 것 알려 주기</td></tr>
+              <tr><td>마지막으로 받은 화면과 자료</td><td>인터넷이 끊겨도 열리게 하기</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="muted small">「파일로 내보내기」로 만든 파일은 이용자 기기에 저장됩니다. 그 파일을 어디에 두고 누구에게 보낼지는 이용자가 정합니다.</p>
+      </section>
+
+      <section class="card">
+        <h2>다른 곳으로 가는 요청</h2>
+        <p>화면을 보여 주려면 아래 서비스에서 파일을 받아 와야 합니다. 이때 여느 웹사이트를 열 때와 마찬가지로 이용자의 인터넷 주소(IP)와 브라우저 종류 같은 접속 정보가 그 서비스에 전달됩니다. 찜이나 기록 같은 내용은 함께 보내지 않습니다. 각 서비스가 접속 정보를 어떻게 다루는지는 그 서비스의 방침을 따릅니다.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>서비스</th><th>받아 오는 것</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>GitHub Pages (GitHub)</td><td>사이트 화면과 자료 파일</td></tr>
+              <tr><td>Google Fonts (Google)</td><td>제목에 쓰는 글꼴</td></tr>
+              <tr><td>더술닷컴 (thesool.com)</td><td>술 제품 사진</td></tr>
+              <tr><td>일부 양조장 홈페이지</td><td>더술닷컴에 사진이 없는 술의 제품 사진</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>술 화면의 구매처·출처 링크를 누르면 다른 사이트로 이동합니다. 이동한 뒤에는 그 사이트의 개인정보처리방침이 적용됩니다.</p>
+        <p class="muted small">안드로이드 앱은 구글 플레이를 통해 설치됩니다. 설치·업데이트 과정에서 구글이 다루는 정보는 구글의 방침을 따릅니다.</p>
+      </section>
+
+      <section class="card">
+        <h2>제3자 제공과 위탁</h2>
+        <p>운영자가 가진 개인정보가 없으므로 다른 곳에 제공하거나 맡기는 일도 없습니다.</p>
+      </section>
+
+      <section class="card">
+        <h2>내 기록 지우는 방법</h2>
+        <ul>
+          <li><strong>앱·사이트 안에서:</strong> 「내 술장」 화면의 「기록 모두 지우기」로 찜과 기록을 지울 수 있습니다.</li>
+          <li><strong>안드로이드 앱:</strong> 기록은 크롬 브라우저의 사이트 저장 공간에 들어 있습니다. 앱을 삭제하는 것만으로는 지워지지 않을 수 있으니, 크롬 설정 → 사이트 설정 → 저장된 데이터에서 coste77777-pixel.github.io 의 데이터를 삭제해 주세요.</li>
+          <li><strong>웹 브라우저:</strong> 브라우저 설정에서 이 사이트의 저장된 데이터(사이트 데이터)를 삭제합니다.</li>
+        </ul>
+        <p class="muted small">기록은 기기 안에만 있어서 지우면 되살릴 수 없습니다. 남겨 두려면 먼저 「파일로 내보내기」로 파일을 만들어 두세요. 운영자 쪽에는 지울 자료가 없습니다.</p>
+      </section>
+
+      <section class="card">
+        <h2>미성년자</h2>
+        <p>「전통주 발견」은 술 정보를 다루므로 만 19세 이상을 위한 서비스입니다. 처음 열 때 만 19세 이상인지 묻고, 그 답은 기기 안에만 저장합니다. 나이를 증명하는 서류나 생년월일을 받지 않습니다.</p>
+      </section>
+
+      <section class="card">
+        <h2>방침이 바뀌면</h2>
+        <p>기능이 달라져 다루는 정보가 바뀌면 이 화면을 먼저 고치고 위쪽의 시행일을 바꿉니다.</p>
+      </section>
+
+      <section class="card">
+        <h2>문의</h2>
+        <p>개인정보와 관련해 궁금한 점은 아래로 알려 주세요.</p>
+        <p>전통주 발견 운영자 · [문의 메일 주소]</p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>19세 미만은 주류를 구매할 수 없습니다.</p>
+      <p>구매처 링크는 다른 사이트로 이동하며, 가격과 판매 여부는 그곳에서 확인해 주세요.</p>
+      <a href="about.html">순위 기준과 자료 출처</a>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initTheme } from './js/theme.js';
+    initTheme();
+  </script>
+</body>
+</html>

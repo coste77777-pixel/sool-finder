@@ -1,4 +1,5 @@
-import { initTheme } from './theme.js';
+import { initApp } from './app.js';
+import { myStore } from './store.js';
 import { breweryById, drinksOfBrewery, loadAll, newsOfBrewery, scoreOf } from './data.js';
 import {
   CATEGORY_LABELS, CATEGORY_ORDER, el, formatAbv, formatDate, getParam, newsItem, safeUrl, showMessage, textOrNone,
@@ -15,6 +16,19 @@ function sourcesList(sources) {
     list.append(el('li', {}, link(s.url), ` (수집 ${formatDate(s.collected)})`));
   });
   return list;
+}
+
+function favButton(id) {
+  const store = myStore();
+  const button = el('button', { class: 'btn toggle', type: 'button' });
+  const draw = () => {
+    const on = store.isFav('brewery', id);
+    button.setAttribute('aria-pressed', on ? 'true' : 'false');
+    button.textContent = on ? '찜한 양조장' : '양조장 찜';
+  };
+  button.addEventListener('click', () => { store.toggleFav('brewery', id); draw(); });
+  draw();
+  return el('div', { class: 'actions' }, button);
 }
 
 function render(main, brewery) {
@@ -71,6 +85,7 @@ function render(main, brewery) {
       brewery.is_large ? el('span', { class: 'badge', text: '대형 업체' }) : null,
       brewery.designations?.length ? el('span', { class: 'badge accent', text: '찾아가는 양조장' }) : null),
     el('p', { class: 'muted', text: `${brewery.region ?? '지역 미상'} · 술 ${drinks.length}종${byCat ? ` (${byCat})` : ''}` }),
+    favButton(brewery.id),
     el('section', { class: 'card' }, el('h2', { text: '양조장 정보' }), facts),
     el('section', { class: 'card' },
       el('h2', { text: `이 양조장의 술 ${drinks.length}종` }),
@@ -91,7 +106,7 @@ function render(main, brewery) {
 }
 
 async function start() {
-  initTheme();
+  initApp();
   const main = document.getElementById('main');
   try {
     await loadAll();

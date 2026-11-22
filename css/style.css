@@ -976,6 +976,196 @@ th {
   }
 }
 
+/* ---------- 내 기록(찜·마셔 본 술) ---------- */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.btn.primary {
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--bg);
+}
+
+.btn.toggle[aria-pressed='true'] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn.toggle[aria-pressed='true']::before {
+  content: '✓ ';
+}
+
+label.btn {
+  display: inline-flex;
+  align-items: center;
+}
+
+.stars-input {
+  display: flex;
+  gap: 2px;
+  margin: 4px 0 8px;
+}
+
+.star {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.memo-field {
+  display: grid;
+  gap: 2px;
+  max-width: 520px;
+}
+
+.memo-field input {
+  min-height: 44px;
+  padding: 8px 0;
+  border: 0;
+  border-bottom: 1px solid var(--text);
+  border-radius: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+}
+
+.memo-field input:focus-visible {
+  outline: none;
+  border-bottom: 2px solid var(--accent);
+}
+
+.rank-row.my-row,
+.rank-row.with-thumb.my-row {
+  grid-template-columns: 56px minmax(0, 1fr);
+}
+
+.rank-row.my-row .thumb {
+  grid-row: auto;
+}
+
+.my-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  margin-top: 4px;
+}
+
+.stars {
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+
+.memo {
+  flex: 1 1 100%;
+  margin: 2px 0 0;
+  font-size: 0.9375rem;
+}
+
+#since {
+  padding-bottom: 28px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.visually-hidden:focus-visible + .btn,
+label.btn:focus-within {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* ---------- 성인 확인 ---------- */
+.gated,
+.gated body {
+  overflow: hidden;
+}
+
+.gate {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+  background: var(--bg);
+}
+
+.gate-box {
+  width: 100%;
+  max-width: 420px;
+  padding: 28px 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.gate-box h2 {
+  font-size: 1.6rem;
+}
+
+.gate-actions {
+  display: grid;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+/* ---------- 아래쪽 메뉴(좁은 화면) ---------- */
+.tabbar {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  border-top: 1px solid var(--rule);
+  background: var(--bg);
+}
+
+.tabbar a {
+  display: grid;
+  place-items: center;
+  min-height: 56px;
+  color: var(--muted);
+  font-family: var(--serif);
+  font-size: 0.9375rem;
+}
+
+.tabbar a[aria-current='page'] {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+body {
+  padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 860px) {
+  .tabbar {
+    display: none;
+  }
+
+  body {
+    padding-bottom: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     scroll-behavior: auto !important;

@@ -1,4 +1,5 @@
-import { initTheme } from './theme.js';
+import { initApp } from './app.js';
+import { myStore } from './store.js';
 import { breweryById, drinkById, loadAll, scoreOf } from './data.js';
 import {
   BASIS_LABELS, CATEGORY_LABELS, drinkPhoto, el, formatAbv, formatDate, getParam, safeUrl, showMessage, textOrNone,
@@ -7,6 +8,92 @@ import {
 function link(url) {
   const safe = safeUrl(url);
   return safe ? el('a', { href: safe, target: '_blank', rel: 'noopener noreferrer', text: safe }) : textOrNone(url);
+}
+
+/** 찜과 마셔 본 기록. 이 기기에만 저장된다. */
+function myCard(drink) {
+  const store = myStore();
+  const panel = el('div', {});
+  // 알림 줄은 한 번만 만들어 두어야 화면 낭독기가 바뀐 글을 읽어 준다.
+  const status = el('p', { class: 'muted small', role: 'status', 'aria-live': 'polite' });
+  let confirmDelete = false;
+
+  const draw = (focusKey = null) => {
+    const fav = store.isFav('drink', drink.id);
+    const rec = store.getTasted(drink.id);
+    const favBtn = el('button', {
+      class: 'btn toggle', type: 'button', 'data-key': 'fav', 'aria-pressed': fav ? 'true' : 'false', text: fav ? '찜한 술' : '찜',
+    });
+    favBtn.addEventListener('click', () => {
+      status.textContent = store.toggleFav('drink', drink.id) ? '찜했습니다.' : '찜을 풀었습니다.';
+      draw('fav');
+    });
+    const children = [];
+    if (!rec) {
+      const tasteBtn = el('button', { class: 'btn', type: 'button', 'data-key': 'taste', text: '마셔 봤어요' });
+      tasteBtn.addEventListener('click', () => {
+        store.setTasted(drink.id, { name: drink.name });
+        status.textContent = '기록했습니다. 별점과 메모를 남겨 보세요.';
+        draw('star-1');
+      });
+      children.push(el('div', { class: 'actions' }, favBtn, tasteBtn));
+    } else {
+      const starButtons = [1, 2, 3, 4, 5].map((n) => {
+        const b = el('button', {
+          class: 'star', type: 'button', role: 'radio', 'data-key': `star-${n}`,
+          'aria-checked': rec.rating === n ? 'true' : 'false', 'aria-label': `별점 ${n}점`,
+          text: rec.rating && n <= rec.rating ? '★' : '☆',
+        });
+        b.addEventListener('click', () => {
+          const next = rec.rating === n ? null : n;
+          store.setTasted(drink.id, { rating: next, name: drink.name });
+          status.textContent = next ? `별점 ${next}점을 저장했습니다.` : '별점을 지웠습니다.';
+          draw(`star-${n}`);
+        });
+        return b;
+      });
+      const memo = el('input', {
+        type: 'text', id: 'memo', 'data-key': 'memo', maxlength: '100', value: rec.memo,
+        placeholder: '한 줄 메모 (100자까지)', autocomplete: 'off', enterkeyhint: 'done',
+      });
+      // 글자를 칠 때마다 바로 저장한다(뒤로 가기를 눌러도 남도록). 화면은 다시 그리지 않는다.
+      memo.addEventListener('input', () => {
+        store.setTasted(drink.id, { memo: memo.value, name: drink.name });
+        status.textContent = '메모를 저장했습니다.';
+      });
+      const removeBtn = el('button', {
+        class: 'btn', type: 'button', 'data-key': 'remove', text: confirmDelete ? '정말 지울까요? 한 번 더 누르세요' : '기록 지우기',
+      });
+      removeBtn.addEventListener('click', () => {
+        if (!confirmDelete) {
+          confirmDelete = true;
+          status.textContent = '지우면 별점과 메모가 사라집니다.';
+          draw('remove');
+          return;
+        }
+        confirmDelete = false;
+        store.removeTasted(drink.id);
+        status.textContent = '기록을 지웠습니다.';
+        draw('taste');
+      });
+      children.push(
+        el('div', { class: 'actions' }, favBtn),
+        el('p', { class: 'muted small', text: rec.date ? `${formatDate(rec.date)}에 마셔 봤다고 기록했습니다.` : '마셔 봤다고 기록했습니다.' }),
+        el('div', { class: 'stars-input', role: 'radiogroup', 'aria-label': '내 별점' }, starButtons),
+        el('label', { class: 'memo-field', for: 'memo' }, el('span', { class: 'muted small', text: '메모' }), memo),
+        el('div', { class: 'actions' }, removeBtn));
+    }
+    panel.replaceChildren(...children);
+    if (focusKey) {
+      panel.querySelector(`[data-key="${focusKey}"]`)?.focus();
+    }
+  };
+  draw();
+  return el('section', { class: 'card my-card', 'aria-labelledby': 'h-my' },
+    el('h2', { id: 'h-my', text: '내 기록' }),
+    panel,
+    status,
+    el('p', { class: 'muted small' }, '이 기기에만 저장됩니다. ', el('a', { href: 'my.html', text: '내 술장에서 모아 보기' })));
 }
 
 function scoreCard(drink, score, weights) {
@@ -97,6 +184,7 @@ function render(main, drink, rankings) {
     el('a', { class: 'back', href: 'index.html', text: '← 첫 화면' }),
     el('h1', { text: drink.name }),
     el('p', { class: 'muted', text: `${CATEGORY_LABELS[drink.category] ?? ''} · ${formatAbv(drink.abv)} · ${brewery?.name ?? '양조장 정보 없음'}` }),
+    myCard(drink),
     scoreCard(drink, score, rankings.weights ?? {}),
     el('section', { class: 'card' },
       el('h2', { text: '술 정보' }),
@@ -119,7 +207,7 @@ function render(main, drink, rankings) {
 }
 
 async function start() {
-  initTheme();
+  initApp();
   const main = document.getElementById('main');
   let data = null;
   try {

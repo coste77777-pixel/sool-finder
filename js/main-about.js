@@ -1,4 +1,4 @@
-import { initTheme } from './theme.js';
+import { initApp } from './app.js';
 import { drinkById, loadAll } from './data.js';
 import { BASIS_LABELS, CATEGORY_LABELS, el, formatDate, showMessage } from './utils.js';
 
@@ -91,7 +91,7 @@ function render(main, data) {
 }
 
 async function start() {
-  initTheme();
+  initApp();
   const main = document.getElementById('main');
   try {
     render(main, await loadAll());
